@@ -90,7 +90,9 @@
         // }
 
         var img  = document.getElementsByTagName('img')[0];
+
         gauss(img);
+
         function gaussBlur(imgData) {
             var pixes = imgData.data;
             var width = imgData.width;
@@ -168,21 +170,31 @@
             //end
             return imgData;
         }
-        function  gauss (img) {
-            var canvas = document.createElement('canvas');
-            canvas.width = img.offsetWidth;
-            canvas.height = img.offsetHeight;
-            var ctx = canvas.getContext('2d');
-            ctx.drawImage(img,0,0,canvas.width,canvas.height)
-            var pixel = ctx.getImageData(0,0,canvas.width,canvas.height)
-            gaussBlur(pixel);
-            ctx.putImageData(pixel, 0, 0); 
-            var imageData = canvas.toDataURL();
-            img.src = "imageData";
-        }
-        
-        
 
+        function gauss(img) {
+            var w = img.width,
+                h = img.height,
+                canvasW = 40,
+                canvasH = 40;
+
+            var canvas = document.createElement('canvas'),
+                ctx = canvas.getContext('2d');
+
+            canvas.width = canvasW;
+            canvas.height = canvasH;
+
+            ctx.drawImage(img, 0, 0, w, h, 0, 0, canvasW, canvasH);
+
+            var pixel = ctx.getImageData(0, 0, canvasH, canvasH);
+
+            gaussBlur(pixel);
+
+            ctx.putImageData(pixel, 0, 0);
+
+            var imageData = canvas.toDataURL();
+
+            img.setAttribute('src',imageData);
+        }
     </script>
     
 </body>
